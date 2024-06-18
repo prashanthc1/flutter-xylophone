@@ -30,7 +30,7 @@ class XolophonePlate extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: TextButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(color),
+            backgroundColor: WidgetStateProperty.all<Color>(color),
           ),
           onPressed: () {
             playSound(number);

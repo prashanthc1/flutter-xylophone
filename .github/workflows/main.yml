@@ -1,104 +1,84 @@
 name: Flutter Release
 
 on:
-  push:
-    tags:
-      - 'v*'  # Trigger the workflow on tags that match versioning format, e.g., v1.0.0
+    push:
+        tags:
+            - "v*" # Trigger the workflow on tags that match versioning format, e.g., v1.0.0
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+    release:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
 
-      - name: Install Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.0.0'  # Specify your Flutter version
+            - name: Install Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: "3.5.4" # Specify your Flutter version
 
-      - name: Install dependencies
-        run: flutter pub get
+            - name: Install dependencies
+              run: flutter pub get
 
-      # Android Build Steps
-      - name: Build Android APK
-        run: flutter build apk --release
+            # Android Build Steps
+            - name: Build Android APK
+              run: flutter build apk --release
 
-      - name: Build Android App Bundle
-        run: flutter build appbundle --release
+            - name: Build Android App Bundle
+              run: flutter build appbundle --release
 
-      # iOS Build Steps
-      - name: Build iOS
-        if: runner.os == 'macOS'
-        env:
-          IOS_CODE_SIGNING_IDENTITY: ${{ secrets.IOS_CODE_SIGNING_IDENTITY }}
-          IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
-        run: flutter build ios --release
+            # Web Build Steps
+            - name: Build Web
+              run: flutter build web
 
-      # Web Build Steps
-      - name: Build Web
-        run: flutter build web
+            # Zip Web Files (optional for easy upload)
+            - name: Archive Web Build Files
+              run: |
+                  mkdir -p release
+                  zip -r release/flutter_web.zip build/web
 
-      # Zip Web Files (optional for easy upload)
-      - name: Archive Web Build Files
-        run: |
-          mkdir -p release
-          zip -r release/flutter_web.zip build/web
+            # Create a GitHub Release
+            - name: Create GitHub Release
+              id: create_release
+              uses: actions/create-release@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  tag_name: ${{ github.ref_name }} # Tag name that triggered the release
+                  release_name: "Release ${{ github.ref_name }}"
+                  draft: false
+                  prerelease: false
 
-      # Create a GitHub Release
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}  # Tag name that triggered the release
-          release_name: "Release ${{ github.ref_name }}"
-          draft: false
-          prerelease: false
+            # Upload Android APK to GitHub Release
+            - name: Upload APK to Release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: build/app/outputs/flutter-apk/app-release.apk
+                  asset_name: app-release.apk
+                  asset_content_type: application/vnd.android.package-archive
 
-      # Upload Android APK to GitHub Release
-      - name: Upload APK to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: app-release.apk
-          asset_content_type: application/vnd.android.package-archive
+            # Upload Android App Bundle to GitHub Release
+            - name: Upload AAB to Release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: build/app/outputs/bundle/release/app-release.aab
+                  asset_name: app-release.aab
+                  asset_content_type: application/octet-stream
 
-      # Upload Android App Bundle to GitHub Release
-      - name: Upload AAB to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/bundle/release/app-release.aab
-          asset_name: app-release.aab
-          asset_content_type: application/octet-stream
-
-      # Upload iOS IPA to GitHub Release
-      - name: Upload IPA to Release
-        if: runner.os == 'macOS'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/ios/ipa/app-release.ipa  # Ensure this path matches your IPA path
-          asset_name: app-release.ipa
-          asset_content_type: application/octet-stream
-
-      # Upload Web ZIP to GitHub Release
-      - name: Upload Web ZIP to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: release/flutter_web.zip
-          asset_name: flutter_web.zip
-          asset_content_type: application/zip
+            # Upload Web ZIP to GitHub Release
+            - name: Upload Web ZIP to Release
+              uses: actions/upload-release-asset@v1
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  upload_url: ${{ steps.create_release.outputs.upload_url }}
+                  asset_path: release/flutter_web.zip
+                  asset_name: flutter_web.zip
+                  asset_content_type: application/zip

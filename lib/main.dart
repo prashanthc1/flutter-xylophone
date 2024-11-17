@@ -1,7 +1,5 @@
-// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
-// 🌎 Project imports:
 import 'pages/main_page.dart';
 
 void main() {

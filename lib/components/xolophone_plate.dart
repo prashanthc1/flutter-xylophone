@@ -1,7 +1,5 @@
-// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
-// 📦 Package imports:
 import 'package:audioplayers/audioplayers.dart';
 
 class XolophonePlate extends StatelessWidget {

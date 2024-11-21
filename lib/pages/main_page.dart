@@ -37,13 +37,13 @@ class MainPage extends StatelessWidget {
       body: const Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          XolophonePlate(number: 1, color: Colors.red, name: "Red"),
-          XolophonePlate(number: 2, color: Colors.orange, name: "Orange"),
-          XolophonePlate(number: 3, color: Colors.yellow, name: "Yellow"),
-          XolophonePlate(number: 4, color: Colors.green, name: "Green"),
-          XolophonePlate(number: 5, color: Colors.teal, name: "Teal"),
-          XolophonePlate(number: 6, color: Colors.blue, name: "Blue"),
-          XolophonePlate(number: 7, color: Colors.purple, name: "Purple"),
+          XolophonePlate(number: 1, color: Colors.red, name: "స"),
+          XolophonePlate(number: 2, color: Colors.orange, name: "రి"),
+          XolophonePlate(number: 3, color: Colors.yellow, name: "గ"),
+          XolophonePlate(number: 4, color: Colors.green, name: "మ"),
+          XolophonePlate(number: 5, color: Colors.teal, name: "ప"),
+          XolophonePlate(number: 6, color: Colors.blue, name: "ద"),
+          XolophonePlate(number: 7, color: Colors.purple, name: "ని"),
         ],
       ),
     );

@@ -5,7 +5,7 @@ on:
         branches:
             - main
         tags:
-            - "v*" # Trigger the workflow on tags that match versioning format, e.g., v1.0.0
+            - "v1.0.0"
 
 jobs:
     release:

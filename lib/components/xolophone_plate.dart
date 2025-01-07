@@ -36,6 +36,7 @@ class XolophonePlate extends StatelessWidget {
           child: Text(
             name,
             style: const TextStyle(
+              fontSize: 20,
               color: Colors.white,
             ),
           ),

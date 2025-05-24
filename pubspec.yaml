@@ -49,7 +49,7 @@ flutter_launcher_icons:
         image_path: "assets/app-icon/Xylophone.jpg"
 
 import_sorter:
-    emojis: false
-    comments: false
+    emojis: true
+    comments: true
     ignored_files: # Optional, defaults to []
         - \/test\/*

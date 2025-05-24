@@ -1,5 +1,7 @@
+// 🐦 Flutter imports:
 import 'package:flutter/material.dart';
 
+// 📦 Package imports:
 import 'package:audioplayers/audioplayers.dart';
 
 class XolophonePlate extends StatelessWidget {
@@ -16,9 +18,7 @@ class XolophonePlate extends StatelessWidget {
 
   void playSound(int songNumber) {
     final player = AudioPlayer();
-    player.play(
-      AssetSource("note$songNumber.wav"),
-    );
+    player.play(AssetSource("note$songNumber.wav"));
   }
 
   @override
@@ -36,8 +36,8 @@ class XolophonePlate extends StatelessWidget {
           child: Text(
             name,
             style: const TextStyle(
-              fontSize: 20,
-              color: Colors.white,
+              fontSize: 30,
+              color: Color.fromARGB(255, 8, 28, 98),
             ),
           ),
         ),
